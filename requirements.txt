@@ -10,3 +10,5 @@ matplotlib>=3.0
 seaborn>=0.11
 scikit-learn
 tensorflow
+serpapi
+google-search-results
