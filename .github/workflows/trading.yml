@@ -1,0 +1,41 @@
+name: Trading Runner
+
+on:
+  schedule:
+    # Run every Monday at 4:30 PM ET (approximately every 5 business days)
+    - cron: '30 20 * * 1'
+  workflow_dispatch:
+
+jobs:
+  trade:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Run trading script
+        env:
+          SERP_API: ${{ secrets.SERP_API }}
+          Tiingo_API: ${{ secrets.TIINGO_API }}
+          Alpaca_Key: ${{ secrets.ALPACA_API_KEY }}
+          Alpaca_Secret: ${{ secrets.ALPACA_SECRET_KEY }}
+        run: python src/alpaca_trader.py
+      
+      - name: Commit updated data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/ backtest_results/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto: Updated data and results - $(date)" && git push)
