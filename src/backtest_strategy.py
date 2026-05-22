@@ -115,7 +115,28 @@ def load_model_and_artifacts():
         if not path.exists():
             raise FileNotFoundError(f"Model file not found: {path}")
         if zipfile.is_zipfile(path):
-            return load_model(str(path))
+            try:
+                from tensorflow.keras.layers import Dense as _KerasDense
+                _orig_dense_from_config = _KerasDense.from_config
+
+                def _patched_dense_from_config(config):
+                    if isinstance(config, dict):
+                        config.pop("quantization_config", None)
+                    return _orig_dense_from_config(config)
+
+                _KerasDense.from_config = staticmethod(_patched_dense_from_config)
+            except Exception:
+                _orig_dense_from_config = None
+
+            try:
+                return load_model(str(path))
+            finally:
+                # restore original if we patched it
+                if _orig_dense_from_config is not None:
+                    try:
+                        _KerasDense.from_config = _orig_dense_from_config
+                    except Exception:
+                        pass
         if _is_hdf5_file(str(path)):
             with h5py.File(str(path), 'r') as f:
                 model_conf = f.attrs.get('model_config')
