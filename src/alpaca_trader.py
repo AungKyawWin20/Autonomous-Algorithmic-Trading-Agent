@@ -193,6 +193,9 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Run the Alpaca trading workflow.")
+    parser.add_argument("--serpapi-key", dest="serpapi_key", help="SerpAPI key")
+    parser.add_argument("--tiingo-token", dest="tiingo_token", help="Tiingo API token")
+    parser.add_argument("--finbert-dir", dest="finbert_dir", help="Directory containing FinBERT model files")
     parser.add_argument("--dry-run", action="store_true", help="Run the workflow without placing orders")
     args = parser.parse_args()
 
@@ -201,6 +204,8 @@ if __name__ == "__main__":
 
     if not serpapi_key:
         raise SystemExit("SERP_API environment variable not set or --serpapi-key not provided.")
+    if not tiingo_token:
+        raise SystemExit("Tiingo_API environment variable not set or --tiingo-token not provided.")
     if not ALPACA_API_KEY or not ALPACA_SECRET_KEY:
         raise SystemExit("ALPACA_API_KEY and ALPACA_SECRET_KEY environment variables not set.")
 
