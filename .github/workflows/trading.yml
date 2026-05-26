@@ -2,7 +2,7 @@ name: Trading Runner
 
 on:
   schedule:
-    - cron: 00 03 * * 2
+    - cron: '00 21 * * 5'
   workflow_dispatch:
 
 permissions:
