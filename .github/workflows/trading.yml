@@ -6,6 +6,9 @@ on:
     - cron: '30 20 * * 1'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   trade:
     runs-on: ubuntu-latest
@@ -16,6 +19,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
       
       - name: Set up Python 3.10
