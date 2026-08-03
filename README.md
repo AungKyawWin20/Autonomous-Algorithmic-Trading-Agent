@@ -1,4 +1,4 @@
-# Capstone Final - AI Trading Backtest and Signal System
+# Autonomous Algorithmic Trading Agent: Multi-modal Fusion of LSTM and Financial NLP (Senior Capstone Project)
 
 ## Project Overview
 This repository contains an end-to-end AI trading research project for U.S. large-cap equities, built around an LSTM-based predictive model and a backtesting engine.
